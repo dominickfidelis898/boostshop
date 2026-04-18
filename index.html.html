@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BoostShop 🎮 — Contas & Moedas</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{--red:#ff4655;--dark:#08080f;--card:#10101c;--border:#22223a;--text:#e0e0f0;--muted:#7878a0;--cyan:#00d4ff;--gold:#ffd700;--green:#4caf50;}
+html{scroll-behavior:smooth;}
+body{background:var(--dark);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;overflow-x:hidden;}
+#bgc{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;}
+.orb{position:fixed;border-radius:50%;filter:blur(100px);pointer-events:none;z-index:0;animation:orba 20s ease-in-out infinite;}
+.o1{width:500px;height:500px;background:radial-gradient(circle,rgba(255,70,85,.12),transparent);top:-150px;left:-150px;}
+.o2{width:400px;height:400px;background:radial-gradient(circle,rgba(0,212,255,.08),transparent);bottom:10%;right:-100px;animation-delay:-7s;}
+.o3{width:300px;height:300px;background:radial-gradient(circle,rgba(155,89,182,.08),transparent);top:40%;left:40%;animation-delay:-14s;}
+@keyframes orba{0%,100%{transform:translate(0,0);}33%{transform:translate(40px,-40px);}66%{transform:translate(-30px,30px);}}
+nav{position:fixed;top:0;left:0;right:0;z-index:500;height:62px;background:rgba(8,8,15,.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 1.5rem;gap:1rem;}
+.logo{font-size:1.4rem;font-weight:900;background:linear-gradient(135deg,var(--red),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:2px;text-transform:uppercase;cursor:pointer;}
+.nav-lnks{display:flex;gap:.5rem;}
+.nav-lnks a{color:var(--muted);text-decoration:none;font-size:.85rem;font-weight:600;padding:5px 10px;border-radius:6px;transition:.2s;}
+.nav-lnks a:hover{color:var(--cyan);}
+.nav-act{display:flex;gap:.6rem;align-items:center;}
+.btn{padding:7px 14px;border-radius:7px;border:none;cursor:pointer;font-weight:700;font-size:.85rem;transition:all .2s;display:inline-flex;align-items:center;gap:5px;}
+.br{background:var(--red);color:#fff;}.br:hover{background:#e03040;transform:translateY(-1px);}
+.bo{background:transparent;color:var(--cyan);border:1px solid var(--cyan);}.bo:hover{background:var(--cyan);color:var(--dark);}
+.bg{background:transparent;color:var(--text);border:1px solid var(--border);}.bg:hover{border-color:var(--cyan);color:var(--cyan);}
+.cwrap{position:relative;}
+.cbadge{position:absolute;top:-6px;right:-6px;background:var(--red);color:#fff;border-radius:50%;width:17px;height:17px;font-size:.65rem;font-weight:900;display:flex;align-items:center;justify-content:center;}
+@media(max-width:600px){.nav-lnks{display:none;}}
+.hero{position:relative;z-index:1;min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:80px 1.5rem 3rem;background:radial-gradient(ellipse at 50% 50%,rgba(255,70,85,.1),transparent 60%);}
+.hero h1{font-size:clamp(2.2rem,6vw,5rem);font-weight:900;line-height:1.1;margin-bottom:1rem;}
+.hero h1 span{background:linear-gradient(135deg,var(--red),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hero p{font-size:1.1rem;color:var(--muted);margin-bottom:2rem;}
+.hchips{display:flex;gap:.7rem;justify-content:center;flex-wrap:wrap;margin-bottom:2.5rem;}
+.chip{padding:5px 14px;border-radius:20px;font-size:.8rem;font-weight:700;}
+.cr{background:rgba(255,70,85,.18);color:var(--red);border:1px solid rgba(255,70,85,.35);}
+.cc{background:rgba(0,212,255,.15);color:var(--cyan);border:1px solid rgba(0,212,255,.3);}
+.cg{background:rgba(76,175,80,.15);color:var(--green);border:1px solid rgba(76,175,80,.3);}
+.hbtns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;}
+.wrap{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:5rem 1.5rem;}
+.sh{text-align:center;margin-bottom:3rem;}
+.slbl{display:inline-block;padding:4px 12px;border-radius:20px;font-size:.72rem;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:.8rem;}
+.lv{background:rgba(255,70,85,.18);color:var(--red);}
+.lc{background:rgba(0,212,255,.15);color:var(--cyan);}
+.lr{background:rgba(255,68,68,.18);color:#ff5555;}
+.sh h2{font-size:clamp(1.7rem,3.5vw,2.4rem);font-weight:900;margin-bottom:.5rem;}
+.gr{text-shadow:0 0 35px rgba(255,70,85,.5);}
+.gc{text-shadow:0 0 35px rgba(0,212,255,.4);}
+.gx{text-shadow:0 0 35px rgba(255,68,68,.5);}
+.sh p{color:var(--muted);}
+.div{width:50px;height:4px;border-radius:3px;margin:1rem auto 0;}
+.dv{background:var(--red);}.dc{background:var(--cyan);}.dx{background:#ff5555;}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4rem;}
+@media(max-width:880px){.grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:560px){.grid{grid-template-columns:1fr;}}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;cursor:pointer;transition:all .3s;position:relative;}
+.card:hover{transform:translateY(-5px);}
+.cv:hover{border-color:var(--red);box-shadow:0 15px 45px rgba(255,70,85,.22);}
+.cvp:hover{border-color:var(--cyan);box-shadow:0 15px 45px rgba(0,212,255,.2);}
+.crx:hover{border-color:#ff5555;box-shadow:0 15px 45px rgba(255,68,68,.2);}
+.crbx:hover{border-color:var(--green);box-shadow:0 15px 45px rgba(76,175,80,.2);}
+.cimg{height:130px;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative;}
+.bv{background:linear-gradient(135deg,#150810,#2d0d1a 60%,#150810);}
+.bvp{background:linear-gradient(135deg,#080825,#0d1545 60%,#080825);}
+.brx{background:linear-gradient(135deg,#150808,#2d0808 60%,#150808);}
+.brbx{background:linear-gradient(135deg,#081508,#0d2d0d 60%,#081508);}
+.rktg{display:inline-block;padding:2px 8px;border-radius:5px;font-size:.68rem;font-weight:800;margin-top:5px;}
+.rbronze{background:rgba(205,127,50,.3);color:#cd7f32;}.rsilver{background:rgba(192,192,192,.2);color:#c0c0c0;}
+.rgold{background:rgba(255,215,0,.2);color:var(--gold);}.rplat{background:rgba(0,255,200,.2);color:#00ffc8;}
+.rdiamond{background:rgba(100,200,255,.2);color:#64c8ff;}.rasc{background:rgba(200,100,255,.2);color:#c864ff;}
+.rimm{background:rgba(255,50,50,.2);color:#ff5050;}.rrad{background:rgba(255,215,0,.25);color:var(--gold);border:1px solid rgba(255,215,0,.4);}
+.stk{position:absolute;top:8px;right:8px;padding:3px 8px;border-radius:8px;font-size:.68rem;font-weight:800;}
+.shot{background:var(--red);color:#fff;}.spop{background:var(--gold);color:#111;}
+.srare{background:#9b59b6;color:#fff;}.sepic{background:#e74c3c;color:#fff;}.sbest{background:var(--green);color:#fff;}
+.vnum{display:block;font-size:1.9rem;font-weight:900;color:var(--cyan);text-shadow:0 0 20px rgba(0,212,255,.6);}
+.vsub{font-size:.72rem;color:var(--muted);font-weight:600;letter-spacing:1px;}
+.rnum{display:block;font-size:1.9rem;font-weight:900;color:var(--green);text-shadow:0 0 20px rgba(76,175,80,.6);}
+.cbody{padding:1rem;}
+.cname{font-size:.95rem;font-weight:800;margin-bottom:.3rem;}
+.cdesc{font-size:.78rem;color:var(--muted);line-height:1.4;margin-bottom:.8rem;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.cfoot{display:flex;align-items:center;justify-content:space-between;}
+.cprice{font-size:1.2rem;font-weight:900;color:var(--green);}
+.buybtn{padding:6px 13px;border:none;border-radius:7px;font-size:.78rem;font-weight:800;cursor:pointer;transition:.2s;}
+.buybtn:hover{transform:translateY(-1px);}
+.bred{background:var(--red);color:#fff;}.bcyan{background:var(--cyan);color:#111;}
+.brblx{background:#ff5555;color:#fff;}.bgrn{background:var(--green);color:#fff;}
+
+/* OVERLAY */
+.ov{display:none;position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.88);backdrop-filter:blur(10px);overflow-y:auto;padding:1.5rem 1rem;}
+.ov.open{display:flex;align-items:flex-start;justify-content:center;}
+.modal{background:var(--card);border:1px solid var(--border);border-radius:16px;width:100%;animation:mIn .3s ease;}
+@keyframes mIn{from{opacity:0;transform:scale(.94) translateY(-16px);}to{opacity:1;transform:scale(1) translateY(0);}}
+.mh{display:flex;align-items:center;justify-content:space-between;padding:1.2rem 1.5rem;border-bottom:1px solid var(--border);}
+.mh h3{font-size:1.1rem;font-weight:800;}
+.mcl{background:none;border:none;color:var(--muted);font-size:1.6rem;cursor:pointer;line-height:1;transition:.2s;}.mcl:hover{color:var(--red);}
+
+/* PRODUCT MODAL */
+.pgrid{display:grid;grid-template-columns:1fr 1fr;}
+@media(max-width:680px){.pgrid{grid-template-columns:1fr;}}
+.pleft{padding:1.8rem;border-right:1px solid var(--border);}
+@media(max-width:680px){.pleft{border-right:none;border-bottom:1px solid var(--border);}}
+.pbanner{height:190px;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:1.4rem;}
+.pleft h4{font-size:1.3rem;font-weight:900;margin-bottom:.3rem;}
+.ptag{font-size:2rem;font-weight:900;color:var(--green);margin-bottom:1rem;}
+.fl{list-style:none;margin-bottom:1.2rem;}
+.fl li{font-size:.85rem;color:var(--muted);padding:4px 0;display:flex;align-items:center;gap:7px;}
+.fl li::before{content:'✓';color:var(--green);font-weight:900;}
+.fdesc{font-size:.85rem;color:var(--muted);line-height:1.65;background:rgba(255,255,255,.03);padding:.9rem 1rem;border-radius:8px;border:1px solid var(--border);}
+.pright{padding:1.8rem;}
+.pright h4{font-size:1rem;font-weight:800;color:var(--cyan);margin-bottom:1.5rem;}
+.qrb{display:flex;flex-direction:column;align-items:center;gap:.8rem;margin-bottom:1.4rem;}
+#qrW{background:#fff;padding:10px;border-radius:8px;}
+.qrval{font-size:1.6rem;font-weight:900;color:var(--green);}
+.pixcard{background:rgba(0,212,255,.06);border:1px solid rgba(0,212,255,.2);border-radius:10px;padding:1rem;text-align:center;margin-bottom:1.2rem;}
+.pixcard p{font-size:.8rem;color:var(--muted);margin-bottom:.5rem;}
+.pixkey{font-family:monospace;font-size:.95rem;font-weight:700;color:var(--cyan);background:rgba(0,0,0,.35);padding:7px 12px;border-radius:6px;word-break:break-all;display:block;margin-bottom:.6rem;}
+.cpybtn{padding:5px 12px;background:rgba(0,212,255,.18);color:var(--cyan);border:1px solid rgba(0,212,255,.35);border-radius:6px;font-size:.78rem;cursor:pointer;transition:.2s;}.cpybtn:hover{background:rgba(0,212,255,.3);}
+.cfmbtn{width:100%;padding:13px;background:linear-gradient(135deg,#388e3c,#4caf50);color:#fff;border:none;border-radius:10px;font-size:.95rem;font-weight:800;cursor:pointer;transition:.2s;}.cfmbtn:hover{transform:translateY(-2px);box-shadow:0 7px 25px rgba(76,175,80,.4);}
+.cadbtn{width:100%;padding:10px;background:transparent;color:var(--muted);border:1px solid var(--border);border-radius:8px;font-size:.85rem;font-weight:700;cursor:pointer;margin-top:.7rem;transition:.2s;}.cadbtn:hover{border-color:var(--cyan);color:var(--cyan);}
+.pnote{text-align:center;font-size:.72rem;color:var(--muted);margin-top:.7rem;}
+
+/* POST-PURCHASE */
+.pbody{padding:2rem;text-align:center;}
+.bounce{font-size:3.5rem;animation:bnc .8s ease infinite alternate;}
+@keyframes bnc{from{transform:scale(1);}to{transform:scale(1.12);}}
+.pbody h3{font-size:1.3rem;font-weight:900;color:var(--green);margin:.7rem 0 .3rem;}
+.pbody>p{color:var(--muted);font-size:.9rem;margin-bottom:1.8rem;}
+.fg{margin-bottom:1.1rem;text-align:left;}
+.fg label{display:block;font-size:.82rem;font-weight:700;color:var(--muted);margin-bottom:.35rem;}
+.fg input{width:100%;padding:10px 13px;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:.9rem;}
+.fg input:focus{outline:none;border-color:var(--cyan);}
+.ordi{text-align:center;color:var(--muted);font-size:.8rem;margin:.3rem 0;position:relative;}
+.ordi::before,.ordi::after{content:'';position:absolute;top:50%;width:42%;height:1px;background:var(--border);}
+.ordi::before{left:0;}.ordi::after{right:0;}
+.subbtn{width:100%;padding:13px;background:linear-gradient(135deg,var(--red),#c0202e);color:#fff;border:none;border-radius:10px;font-size:.95rem;font-weight:800;cursor:pointer;transition:.2s;margin-top:.5rem;}
+.subbtn:hover{transform:translateY(-2px);box-shadow:0 7px 25px rgba(255,70,85,.4);}
+
+/* LOGIN */
+.lbody{padding:2rem;}
+.tabrow{display:flex;border-bottom:1px solid var(--border);margin-bottom:1.5rem;}
+.tabbtn{flex:1;padding:8px;background:none;border:none;color:var(--muted);font-weight:700;font-size:.9rem;cursor:pointer;border-bottom:3px solid transparent;transition:.2s;}
+.tabbtn.act{color:var(--cyan);border-bottom-color:var(--cyan);}
+
+/* CART */
+.cbody{padding:1.5rem;max-height:55vh;overflow-y:auto;}
+.ci{display:flex;align-items:center;gap:.9rem;padding:.9rem;background:rgba(255,255,255,.03);border-radius:8px;margin-bottom:.7rem;border:1px solid var(--border);}
+.cii{flex:1;}
+.cin{font-weight:700;font-size:.9rem;margin-bottom:.2rem;}
+.cip{color:var(--green);font-weight:800;}
+.cirm{background:none;border:none;color:var(--red);cursor:pointer;font-size:1.1rem;}
+.cfoot{padding:1.2rem 1.5rem;border-top:1px solid var(--border);}
+.ctot{display:flex;justify-content:space-between;font-size:1.1rem;font-weight:900;margin-bottom:1rem;}
+.ctot span:last-child{color:var(--green);}
+
+/* SUPPORT */
+.supp{position:relative;z-index:1;margin:0 1.5rem 4rem;background:rgba(0,212,255,.05);border:1px solid rgba(0,212,255,.15);border-radius:16px;padding:3rem 2rem;text-align:center;}
+.supp h3{font-size:1.4rem;font-weight:800;margin-bottom:.5rem;}
+.supp p{color:var(--muted);margin-bottom:1.2rem;}
+.mlink{display:inline-block;color:var(--cyan);font-weight:700;font-size:1rem;text-decoration:none;padding:9px 20px;border:1px solid rgba(0,212,255,.3);border-radius:8px;transition:.2s;}.mlink:hover{background:rgba(0,212,255,.1);}
+
+/* ADMIN */
+#admp{display:none;position:fixed;inset:0;z-index:2000;background:var(--dark);overflow-y:auto;}
+#admp.open{display:block;}
+.admh{display:flex;align-items:center;justify-content:space-between;padding:1.2rem 2rem;border-bottom:1px solid var(--border);background:rgba(0,0,0,.4);}
+.admh h2{font-size:1.3rem;font-weight:900;color:var(--cyan);}
+.admbody{padding:2rem;}
+.adml{max-width:380px;margin:4rem auto;}
+.adml h3{font-size:1.2rem;font-weight:800;text-align:center;margin-bottom:1.5rem;}
+.srow{display:flex;gap:1rem;margin-bottom:2rem;flex-wrap:wrap;}
+.sbox{flex:1;min-width:140px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1.2rem;text-align:center;}
+.snum{font-size:1.8rem;font-weight:900;}
+.slb{font-size:.78rem;color:var(--muted);margin-top:.2rem;}
+table.ot{width:100%;border-collapse:collapse;font-size:.85rem;}
+.ot th{padding:10px 13px;background:rgba(0,212,255,.08);color:var(--cyan);font-weight:800;text-align:left;border-bottom:1px solid var(--border);}
+.ot td{padding:10px 13px;border-bottom:1px solid var(--border);}
+.ot tr:hover td{background:rgba(255,255,255,.02);}
+.sw{padding:3px 8px;border-radius:5px;font-size:.72rem;font-weight:700;background:rgba(255,165,0,.18);color:orange;}
+.sd{padding:3px 8px;border-radius:5px;font-size:.72rem;font-weight:700;background:rgba(76,175,80,.2);color:var(--green);}
+.noo{text-align:center;padding:4rem;color:var(--muted);}
+.delbtn{background:none;border:1px solid rgba(255,70,85,.3);color:var(--red);border-radius:5px;padding:3px 8px;cursor:pointer;font-size:.75rem;}
+.delbtn:hover{background:rgba(255,70,85,.1);}
+
+/* TOAST */
+#toast{position:fixed;bottom:1.5rem;right:1.5rem;z-index:9999;padding:.9rem 1.3rem;background:var(--card);border-radius:10px;font-weight:700;font-size:.88rem;box-shadow:0 8px 30px rgba(0,0,0,.5);transform:translateY(120%);transition:transform .3s;border-left:4px solid var(--green);max-width:280px;}
+#toast.sh{transform:translateY(0);}
+#toast.er{border-left-color:var(--red);}
+footer{position:relative;z-index:1;text-align:center;padding:2rem;border-top:1px solid var(--border);color:var(--muted);font-size:.82rem;}
+::-webkit-scrollbar{width:5px;}::-webkit-scrollbar-track{background:var(--dark);}::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px;}
+</style>
+</head>
+<body>
+<div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div>
+<canvas id="bgc"></canvas>
+
+<nav>
+  <div class="logo" onclick="scrollTo({top:0,behavior:'smooth'})">⚡ BoostShop</div>
+  <div class="nav-lnks">
+    <a href="#vs">Valorant</a><a href="#vps">VP</a><a href="#rs">Roblox</a><a href="#rbxs">Robux</a>
+  </div>
+  <div class="nav-act">
+    <button class="btn bg" onclick="openAdm()" title="Admin">🔐</button>
+    <button class="btn bg" id="lbtn" onclick="openOv('lm')">👤 Entrar</button>
+    <div class="cwrap">
+      <button class="btn bo" onclick="openOv('cm')">🛒 Carrinho</button>
+      <span class="cbadge" id="cbadge">0</span>
+    </div>
+  </div>
+</nav>
+
+<section class="hero">
+  <div>
+    <h1>A Melhor Loja de<br><span>Contas & Moedas</span></h1>
+    <p>Valorant • Roblox • VP • Robux — Rápido, seguro e confiável!</p>
+    <div class="hchips">
+      <span class="chip cr">🎮 Contas Valorant</span>
+      <span class="chip cc">💎 Valorant Points</span>
+      <span class="chip cr">🟥 Contas Roblox</span>
+      <span class="chip cc">💰 Robux</span>
+      <span class="chip cg">🔒 100% Seguro</span>
+      <span class="chip cg">⚡ Entrega Rápida</span>
+    </div>
+    <div class="hbtns">
+      <button class="btn br" onclick="document.getElementById('vs').scrollIntoView({behavior:'smooth'})">Ver Produtos</button>
+      <button class="btn bo" onclick="openOv('lm')">Criar Conta Grátis</button>
+    </div>
+  </div>
+</section>
+
+<div class="wrap" id="vs">
+  <div class="sh"><span class="slbl lv">Valorant</span><h2 class="gr">🎯 Contas Valorant</h2><p>Contas verificadas com ranks e skins incríveis • R$40 a R$300</p><div class="div dv"></div></div>
+  <div class="grid" id="vg"></div>
+</div>
+
+<div class="wrap" id="vps">
+  <div class="sh"><span class="slbl lc">VP</span><h2 class="gc">💎 Valorant Points</h2><p>Recarregue sua conta e compre as melhores skins!</p><div class="div dc"></div></div>
+  <div class="grid" id="vpg"></div>
+</div>
+
+<div class="wrap" id="rs">
+  <div class="sh"><span class="slbl lr">Roblox</span><h2 class="gx">🟥 Contas Roblox</h2><p>Contas com itens raros, Robux e Premium incluídos • R$10 a R$120</p><div class="div dx"></div></div>
+  <div class="grid" id="rg"></div>
+</div>
+
+<div class="wrap" id="rbxs">
+  <div class="sh"><span class="slbl lr">Robux</span><h2 class="gx">💰 Robux</h2><p>Recarregue sua conta Roblox com Robux na hora!</p><div class="div dx"></div></div>
+  <div class="grid" id="rbxg"></div>
+</div>
+
+<div class="supp">
+  <h3>💬 Suporte ao Cliente</h3>
+  <p>Dúvidas? Problemas? Nossa equipe está aqui para te ajudar!</p>
+  <a class="mlink" href="mailto:sadx65g@gmail.com">📧 sadx65g@gmail.com</a>
+  <p style="margin-top:1rem;font-size:.8rem;color:var(--muted);">Respondemos em até 24 horas úteis</p>
+</div>
+
+<footer><strong>⚡ BoostShop</strong> — © 2025 Todos os direitos reservados<br><span style="margin-top:.4rem;display:block;">Pagamentos via PIX • Entrega em até 24h após confirmação</span></footer>
+
+<!-- PRODUCT MODAL -->
+<div class="ov" id="pm">
+  <div class="modal" style="max-width:920px;margin:auto;">
+    <div class="mh"><h3 id="pmT">Produto</h3><button class="mcl" onclick="closeOv('pm')">×</button></div>
+    <div class="pgrid">
+      <div class="pleft">
+        <div class="pbanner" id="pmB"></div>
+        <h4 id="pmN"></h4>
+        <div class="ptag" id="pmP"></div>
+        <ul class="fl" id="pmF"></ul>
+        <div class="fdesc" id="pmD"></div>
+      </div>
+      <div class="pright">
+        <h4>💳 Pagamento via PIX</h4>
+        <div class="qrb">
+          <div id="qrW"></div>
+          <div class="qrval" id="qrV"></div>
+        </div>
+        <div class="pixcard">
+          <p>Chave PIX (CPF):</p>
+          <span class="pixkey" id="pkd">210.479.717-98</span>
+          <button class="cpybtn" onclick="cpyPix()">📋 Copiar Chave PIX</button>
+        </div>
+        <button class="cfmbtn" onclick="goCfm()">✅ Já Realizei o Pagamento!</button>
+        <button class="cadbtn" onclick="addCart()">🛒 Adicionar ao Carrinho</button>
+        <p class="pnote">⚠️ Após pagar, clique acima e preencha seus dados</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- POST PURCHASE -->
+<div class="ov" id="ppm">
+  <div class="modal" style="max-width:480px;margin:auto;">
+    <div class="mh"><h3>📦 Confirmar Recebimento</h3><button class="mcl" onclick="closeOv('ppm')">×</button></div>
+    <div class="pbody">
+      <div class="bounce">🎉</div>
+      <h3>Pagamento Confirmado!</h3>
+      <p>Preencha seus dados para receber seu produto:</p>
+      <form onsubmit="subOrder(event)">
+        <div class="fg"><label>👤 Nome Completo *</label><input type="text" id="oN" placeholder="Seu nome completo" required></div>
+        <div class="fg"><label>📧 E-mail</label><input type="email" id="oE" placeholder="seu@email.com"></div>
+        <div class="ordi">ou</div>
+        <div class="fg"><label>📱 Celular / WhatsApp</label><input type="tel" id="oP" placeholder="(11) 99999-9999"></div>
+        <button type="submit" class="subbtn">🚀 Enviar Dados e Receber Produto</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- LOGIN -->
+<div class="ov" id="lm">
+  <div class="modal" style="max-width:400px;margin:auto;">
+    <div class="mh"><h3>🔑 Minha Conta</h3><button class="mcl" onclick="closeOv('lm')">×</button></div>
+    <div class="lbody">
+      <div class="tabrow">
+        <button class="tabbtn act" id="tl" onclick="swTab('l')">Entrar</button>
+        <button class="tabbtn" id="tr" onclick="swTab('r')">Criar Conta</button>
+      </div>
+      <div id="fl">
+        <div class="fg"><label>📧 E-mail</label><input type="email" id="le" placeholder="seu@email.com"></div>
+        <div class="fg"><label>🔒 Senha</label><input type="password" id="lp" placeholder="Sua senha"></div>
+        <button class="subbtn" onclick="doLgn()">Entrar</button>
+      </div>
+      <div id="fr" style="display:none;">
+        <div class="fg"><label>👤 Nome</label><input type="text" id="rn" placeholder="Seu nome"></div>
+        <div class="fg"><label>📧 E-mail</label><input type="email" id="re" placeholder="seu@email.com"></div>
+        <div class="fg"><label>🔒 Senha</label><input type="password" id="rp" placeholder="Crie uma senha forte"></div>
+        <button class="subbtn" onclick="doReg()">Criar Conta Grátis</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CART -->
+<div class="ov" id="cm">
+  <div class="modal" style="max-width:500px;margin:auto;">
+    <div class="mh"><h3>🛒 Carrinho</h3><button class="mcl" onclick="closeOv('cm')">×</button></div>
+    <div class="cbody" id="cbody"></div>
+    <div class="cfoot">
+      <div class="ctot"><span>Total:</span><span id="ctot">R$ 0,00</span></div>
+      <button class="cfmbtn" onclick="cartCk()">💳 Finalizar via PIX</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADMIN -->
+<div id="admp">
+  <div class="admh">
+    <h2>⚙️ Painel Admin — BoostShop</h2>
+    <div style="display:flex;gap:.7rem;">
+      <button class="btn bg" onclick="exportOrders()">📥 Exportar CSV</button>
+      <button class="btn bg" onclick="closeAdm()">✕ Fechar</button>
+    </div>
+  </div>
+  <div class="admbody">
+    <div id="admL" class="adml">
+      <h3>🔐 Acesso Restrito</h3>
+      <div class="fg"><label>Senha do Administrador</label><input type="password" id="ap" placeholder="Digite a senha" onkeydown="if(event.key==='Enter')chkAdm()"></div>
+      <button class="subbtn" onclick="chkAdm()">Acessar Painel</button>
+    </div>
+    <div id="admC" style="display:none;">
+      <div class="srow">
+        <div class="sbox"><div class="snum" id="sT" style="color:var(--cyan)">0</div><div class="slb">Total de Pedidos</div></div>
+        <div class="sbox"><div class="snum" id="sR" style="color:var(--green)">R$0</div><div class="slb">Receita Total</div></div>
+        <div class="sbox"><div class="snum" id="sTd" style="color:var(--gold)">0</div><div class="slb">Pedidos Hoje</div></div>
+      </div>
+      <div style="overflow-x:auto;">
+        <table class="ot" id="ot">
+          <thead><tr><th>#</th><th>Data/Hora</th><th>Nome</th><th>E-mail/Tel</th><th>Produto</th><th>Valor</th><th>Status</th><th>Ação</th></tr></thead>
+          <tbody id="otb"></tbody>
+        </table>
+        <div class="noo" id="noo" style="display:none;"><p style="font-size:3rem">📭</p><p>Nenhum pedido ainda.</p></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+const PIX_KEY='21047971798',PIX_DIS='210.479.717-98',AP='boostshop@2024';
+
+const valAcc=[
+  {id:'va1',t:'va',name:'Conta Bronze Iniciante',price:40,rank:'bronze',ico:'🎯',badge:null,
+   ft:['Rank Bronze III','3 Agentes desbloqueados','10 skins básicas','Email verificado'],
+   sd:'Conta Bronze com agentes básicos — ótima para iniciantes!',
+   fd:'Conta Valorant no rank Bronze III com 3 agentes desbloqueados (Brimstone, Sage e Phoenix) e 10 skins básicas de armas incluindo skins de pistola. Histórico limpo, sem banimentos. Perfeita para quem está começando a jogar Valorant!'},
+  {id:'va2',t:'va',name:'Conta Prata Aventureira',price:60,rank:'silver',ico:'⚔️',badge:null,
+   ft:['Rank Prata II','8 Agentes desbloqueados','2 skins raras de pistola','Histórico limpo'],
+   sd:'Conta Prata com 8 agentes e skins raras de pistola.',
+   fd:'Conta no rank Prata II com 8 agentes desbloqueados, incluindo Omen e Reyna. Conta com 2 skins raras de pistola (Classic Prism) e 1 skin de rifle básica. Histórico limpo e mais de 60 horas de jogo!'},
+  {id:'va3',t:'va',name:'Conta Ouro Competitiva',price:80,rank:'gold',ico:'🏆',badge:'Popular',
+   ft:['Rank Ouro I','12 Agentes desbloqueados','Bundle básico equipado','3 skins raras'],
+   sd:'Conta Ouro com 12 agentes e bundle exclusivo. Muito popular!',
+   fd:'Conta no rank Ouro I com 12 agentes desbloqueados. Inclui bundle básico equipado, 3 skins raras incluindo Phantom Prime. Conta com 150+ horas de jogo e histórico competitivo limpo. Pronta para ranked!'},
+  {id:'va4',t:'va',name:'Conta Platina Exclusiva',price:100,rank:'plat',ico:'💎',badge:'Popular',
+   ft:['Rank Platina II','15 Agentes desbloqueados','Skin épica Phantom Glitchpop','Acessórios raros'],
+   sd:'Conta Platina com 15 agentes e skin épica Phantom Glitchpop!',
+   fd:'Conta Platina II com todos os principais agentes desbloqueados (15 no total). Inclui a cobiçada skin Phantom Glitchpop (épica), 2 skins raras adicionais e acessórios exclusivos de temporada. Conta premium com histórico impecável!'},
+  {id:'va5',t:'va',name:'Conta Diamante Elite',price:120,rank:'diamond',ico:'✨',badge:'Hot',
+   ft:['Rank Diamante I','Todos os agentes','5 skins raras + faca lendária','200+ horas'],
+   sd:'Conta Diamante com todos os agentes e faca lendária exclusiva!',
+   fd:'Conta Diamante I com TODOS os agentes desbloqueados! Inclui 5 skins raras de armas e uma faca lendária exclusiva. Mais de 200 horas de jogo e histórico de alto desempenho. Conta de alto nível!'},
+  {id:'va6',t:'va',name:'Conta Ascendente Pro',price:150,rank:'asc',ico:'⚡',badge:'Rare',
+   ft:['Rank Ascendente III','Coleção Prime completa','3 sprays raros','Título de temporada'],
+   sd:'Conta Ascendente com coleção Prime completa e título exclusivo.',
+   fd:'Conta Ascendente III com a incrível coleção Prime completa (Rifle, Pistola, Faca e Corpo). Inclui 3 sprays raros de edição limitada e título de temporada exclusivo. Uma das melhores contas do catálogo!'},
+  {id:'va7',t:'va',name:'Conta Imortal Suprema',price:200,rank:'imm',ico:'🔥',badge:'Rare',
+   ft:['Rank Imortal II','Coleção Reaver completa','Todos os agentes','Título Imortal'],
+   sd:'Conta Imortal com coleção Reaver completa — raridade garantida!',
+   fd:'Conta Imortal II com a lendária coleção Reaver completa (um dos bundles mais desejados do jogo!). Todos os agentes desbloqueados, título de temporada Imortal e 500+ horas de jogo. Raridade garantida!'},
+  {id:'va8',t:'va',name:'Conta Imortal Lendária',price:250,rank:'imm',ico:'🌟',badge:'Epic',
+   ft:['Rank Imortal III','Elderflame Vandal','Coleção Prime completa','20+ skins raras'],
+   sd:'Conta Imortal III com a rara Elderflame Vandal (dragão de fogo)!',
+   fd:'Conta Imortal III com a RARÍSSIMA skin Elderflame Vandal (animada com dragão de fogo!), coleção Prime completa e mais de 20 skins raras adicionais. Uma conta incrível para quem quer o melhor do Valorant!'},
+  {id:'va9',t:'va',name:'Conta Radiante Master',price:300,rank:'rad',ico:'👑',badge:'Epic',
+   ft:['Rank Radiante','Coleção RGX completa','Faca exclusiva Radiante','30+ skins premium'],
+   sd:'A conta mais exclusiva! Rank Radiante com 30+ skins premium.',
+   fd:'A conta mais exclusiva do catálogo! Rank Radiante (top 500 do servidor), coleção RGX completa, faca exclusiva edição Radiante, título de temporada Radiante e mais de 30 skins premium. Estoque extremamente limitado!'}
+];
+
+const vpPkgs=[
+  {id:'vp1',t:'vp',name:'400 VP',am:400,price:15,badge:null,desc:'Ideal para comprar um acessório ou spray!'},
+  {id:'vp2',t:'vp',name:'505 VP',am:505,price:18,badge:null,desc:'Um pouquinho a mais para aproveitar as ofertas da noite!'},
+  {id:'vp3',t:'vp',name:'815 VP',am:815,price:32,badge:null,desc:'Pacote intermediário para skins de pistola ou sprays raros!'},
+  {id:'vp4',t:'vp',name:'905 VP',am:905,price:36,badge:null,desc:'Quase 1000 VP! Ótimo para skins e acessórios variados.'},
+  {id:'vp5',t:'vp',name:'1.010 VP',am:1010,price:40,badge:'Popular',desc:'O pacote mais popular! Perfeito para uma skin de rifle.'},
+  {id:'vp6',t:'vp',name:'1.305 VP',am:1305,price:50,badge:null,desc:'Ótimo valor! Skins de armas + acessórios extras garantidos.'},
+  {id:'vp7',t:'vp',name:'1.700 VP',am:1700,price:64,badge:'Hot',desc:'Para quem quer uma skin de rifle ou bundle parcial!'},
+  {id:'vp8',t:'vp',name:'2.700 VP',am:2700,price:100,badge:'Melhor Valor',desc:'O melhor custo-benefício! Mais VP por real investido.'}
+];
+
+const rblxAcc=[
+  {id:'rb1',t:'ra',name:'Conta Básica Roblox',price:10,ico:'🟥',badge:null,
+   ft:['Itens gratuitos de avatar','Acesso a todos os jogos','Conta verificada'],
+   sd:'Conta básica com itens gratuitos e acesso completo.',
+   fd:'Conta Roblox verificada com itens gratuitos de avatar e acesso a todos os jogos da plataforma. Ótima para ter uma conta separada ou presentear alguém. Entrega imediata após confirmação!'},
+  {id:'rb2',t:'ra',name:'Conta Iniciante Plus',price:20,ico:'🎮',badge:null,
+   ft:['50 Robux incluídos','Acessórios de avatar','Badge collection inicial'],
+   sd:'Conta com 50 Robux e acessórios de avatar.',
+   fd:'Conta Roblox com 50 Robux já incluídos! Acessórios básicos de avatar e uma badge collection inicial. Histórico limpo. Ótima para começar a personalizar seu personagem no Roblox!'},
+  {id:'rb3',t:'ra',name:'Conta Média Gamer',price:35,ico:'⭐',badge:null,
+   ft:['150 Robux incluídos','Itens raros de avatar','Premium 1 mês ativo'],
+   sd:'Conta com 150 Robux e Premium ativo por 1 mês!',
+   fd:'Conta Roblox com 150 Robux incluídos e Premium ativo por 1 mês! Inclui itens raros de avatar e acesso a itens exclusivos de Premium. Ótima para experimentar todos os recursos da plataforma!'},
+  {id:'rb4',t:'ra',name:'Conta Premium Collector',price:50,ico:'💫',badge:'Popular',
+   ft:['Premium ativa','300 Robux incluídos','Itens limitados','Acesso VIP'],
+   sd:'Conta Premium com 300 Robux e itens limitados!',
+   fd:'Conta Roblox Premium com 300 Robux incluídos! Itens limitados de avatar, acesso a jogos exclusivos e comunidades VIP. A conta perfeita para mergulhar de cabeça no Roblox com estilo!'},
+  {id:'rb5',t:'ra',name:'Conta Elite Avatar',price:70,ico:'🌟',badge:'Hot',
+   ft:['Itens limitados raros','500 Robux incluídos','Badges exclusivas','Visual único'],
+   sd:'Conta com 500 Robux e itens limitados raros de avatar!',
+   fd:'Conta Roblox com itens limitados de avatar bastante raros (chapéu exclusivo de evento), 500 Robux incluídos e badges de eventos especiais. Para quem quer se destacar entre os outros jogadores com visual único!'},
+  {id:'rb6',t:'ra',name:'Conta Pro Builder',price:90,ico:'🏗️',badge:'Rare',
+   ft:['Itens UGC raros','800 Robux incluídos','Premium ativo','Grupos exclusivos'],
+   sd:'Conta com 800 Robux, Premium e itens UGC raros.',
+   fd:'Conta Roblox com itens UGC raros criados por top criadores da comunidade, 800 Robux incluídos, Premium ativo e acesso a grupos exclusivos da plataforma. Conta com histórico extenso e reputação positiva!'},
+  {id:'rb7',t:'ra',name:'Conta Lendária Roblox',price:120,ico:'👑',badge:'Epic',
+   ft:['Itens limitados valorizados','1.000 Robux incluídos','Chapéu Dominó exclusivo','Itens de eventos'],
+   sd:'Conta lendária com 1000 Robux e Chapéu Dominó exclusivo!',
+   fd:'A conta Roblox mais completa do catálogo! Itens limitados altamente valorizados, 1.000 Robux incluídos, o rarísso Chapéu Dominó e acessórios exclusivos de eventos passados que não existem mais. Uma conta de colecionador!'}
+];
+
+const robuxPkgs=[
+  {id:'rx1',t:'rbx',name:'415 Robux',am:415,price:25,badge:null,desc:'Pacote starter para personalizar seu personagem!'},
+  {id:'rx2',t:'rbx',name:'500 Robux',am:500,price:30,badge:'Popular',desc:'Pacote popular com 500 Robux para itens e gamepasses!'},
+  {id:'rx3',t:'rbx',name:'660 Robux',am:660,price:40,badge:null,desc:'Ótimo custo-benefício para quem quer mais Robux!'},
+  {id:'rx4',t:'rbx',name:'1.000 Robux',am:1000,price:59,badge:'Melhor Valor',desc:'O melhor pacote! 1000 Robux para gastar como quiser!'}
+];
+
+// STATE
+let curProd=null,cart=JSON.parse(localStorage.getItem('bs_c')||'[]'),
+    users=JSON.parse(localStorage.getItem('bs_u')||'[]'),
+    orders=JSON.parse(localStorage.getItem('bs_o')||'[]'),
+    curUser=JSON.parse(localStorage.getItem('bs_cu')||'null');
+
+// PIX CRC16
+function crc16(s){let c=0xFFFF;for(let i=0;i<s.length;i++){c^=s.charCodeAt(i)<<8;for(let j=0;j<8;j++)c=c&0x8000?(c<<1)^0x1021:(c<<1);c&=0xFFFF;}return c.toString(16).toUpperCase().padStart(4,'0');}
+function fld(id,v){return id+v.length.toString().padStart(2,'0')+v;}
+function pixPayload(amt){
+  const k=PIX_KEY,n='BoostShop',c='SAO PAULO',a=amt.toFixed(2);
+  const pk=fld('01',k),mi=fld('26',fld('00','br.gov.bcb.pix')+pk);
+  let p='000201'+mi+'52040000'+'5303986'+fld('54',a)+'5802BR'+fld('59',n)+fld('60',c)+fld('62',fld('05','***'))+'6304';
+  return p+crc16(p);
+}
+
+// BADGE MAP
+const bmap={'Popular':'spop','Hot':'shot','Rare':'srare','Epic':'sepic','Melhor Valor':'sbest'};
+const rankClasses={bronze:'rbronze',silver:'rsilver',gold:'rgold',plat:'rplat',diamond:'rdiamond',asc:'rasc',imm:'rimm',rad:'rrad'};
+
+// RENDER HELPERS
+function fmtR(v){return'R$ '+v.toFixed(2).replace('.',',');}
+function badgeHTML(b){if(!b)return'';return`<span class="stk ${bmap[b]||'shot'}">${b}</span>`;}
+
+function renderValCards(){
+  document.getElementById('vg').innerHTML=valAcc.map(p=>`
+    <div class="card cv" onclick="openProd('${p.id}')">
+      ${badgeHTML(p.badge)}
+      <div class="cimg bv">
+        <div style="text-align:center"><div style="font-size:2.6rem">${p.ico}</div><span class="rktg ${rankClasses[p.rank]}">${p.rank.toUpperCase()}</span></div>
+      </div>
+      <div class="cbody"><div class="cname">${p.name}</div><div class="cdesc">${p.sd}</div>
+      <div class="cfoot"><div class="cprice">${fmtR(p.price)}</div><button class="buybtn bred">Comprar</button></div></div>
+    </div>`).join('');
+}
+
+function renderVP(){
+  document.getElementById('vpg').innerHTML=vpPkgs.map(p=>`
+    <div class="card cvp" onclick="openProd('${p.id}')">
+      ${badgeHTML(p.badge)}
+      <div class="cimg bvp"><div style="text-align:center"><span class="vnum">${p.am.toLocaleString('pt-BR')}</span><span class="vsub">VALORANT POINTS</span></div></div>
+      <div class="cbody"><div class="cname">${p.name}</div><div class="cdesc">${p.desc}</div>
+      <div class="cfoot"><div class="cprice">${fmtR(p.price)}</div><button class="buybtn bcyan">Comprar</button></div></div>
+    </div>`).join('');
+}
+
+function renderRblx(){
+  document.getElementById('rg').innerHTML=rblxAcc.map(p=>`
+    <div class="card crx" onclick="openProd('${p.id}')">
+      ${badgeHTML(p.badge)}
+      <div class="cimg brx"><div style="text-align:center"><div style="font-size:2.6rem">${p.ico}</div><div style="font-size:.68rem;color:#ff5555;font-weight:800;margin-top:4px">ROBLOX</div></div></div>
+      <div class="cbody"><div class="cname">${p.name}</div><div class="cdesc">${p.sd}</div>
+      <div class="cfoot"><div class="cprice">${fmtR(p.price)}</div><button class="buybtn brblx">Comprar</button></div></div>
+    </div>`).join('');
+}
+
+function renderRobux(){
+  document.getElementById('rbxg').innerHTML=robuxPkgs.map(p=>`
+    <div class="card crbx" onclick="openProd('${p.id}')">
+      ${badgeHTML(p.badge)}
+      <div class="cimg brbx"><div style="text-align:center"><span class="rnum">${p.am.toLocaleString('pt-BR')}</span><span class="vsub">ROBUX</span></div></div>
+      <div class="cbody"><div class="cname">${p.name}</div><div class="cdesc">${p.desc}</div>
+      <div class="cfoot"><div class="cprice">${fmtR(p.price)}</div><button class="buybtn bgrn">Comprar</button></div></div>
+    </div>`).join('');
+}
+
+// OPEN PRODUCT
+function allProds(){return[...valAcc,...vpPkgs,...rblxAcc,...robuxPkgs];}
+function openProd(id){
+  const p=allProds().find(x=>x.id===id);if(!p)return;
+  curProd=p;
+  document.getElementById('pmT').textContent=p.name;
+  document.getElementById('pmN').textContent=p.name;
+  document.getElementById('pmP').textContent=fmtR(p.price);
+  document.getElementById('qrV').textContent=fmtR(p.price);
+  // Banner
+  const b=document.getElementById('pmB');
+  if(p.t==='va'){b.className='pbanner bv';b.innerHTML=`<div style="text-align:center"><div style="font-size:4rem">${p.ico}</div><div style="font-size:.85rem;color:var(--red);font-weight:800;margin-top:6px">VALORANT ACCOUNT</div><span class="rktg ${rankClasses[p.rank]}" style="margin-top:6px">${p.rank.toUpperCase()}</span></div>`;}
+  else if(p.t==='vp'){b.className='pbanner bvp';b.innerHTML=`<div style="text-align:center"><div style="font-size:3rem">💎</div><div style="font-size:1.8rem;font-weight:900;color:var(--cyan);margin-top:4px">${p.am.toLocaleString('pt-BR')} VP</div></div>`;}
+  else if(p.t==='ra'){b.className='pbanner brx';b.innerHTML=`<div style="text-align:center"><div style="font-size:4rem">${p.ico}</div><div style="font-size:.85rem;color:#ff5555;font-weight:800;margin-top:6px">ROBLOX ACCOUNT</div></div>`;}
+  else{b.className='pbanner brbx';b.innerHTML=`<div style="text-align:center"><div style="font-size:3rem">💰</div><div style="font-size:1.8rem;font-weight:900;color:var(--green);margin-top:4px">${p.am.toLocaleString('pt-BR')} Robux</div></div>`;}
+  // Features
+  const feats=p.ft||[];
+  document.getElementById('pmF').innerHTML=feats.map(f=>`<li>${f}</li>`).join('');
+  // Desc
+  document.getElementById('pmD').textContent=p.fd||p.desc||'';
+  // QR
+  genQR(p.price);
+  openOv('pm');
+}
+
+// QR CODE
+let qrInst=null;
+function genQR(amt){
+  const w=document.getElementById('qrW');w.innerHTML='';
+  const pl=pixPayload(amt);
+  try{qrInst=new QRCode(w,{text:pl,width:170,height:170,colorDark:'#000000',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M});}
+  catch(e){w.innerHTML='<div style="width:170px;height:170px;display:flex;align-items:center;justify-content:center;background:#fff;color:#000;font-size:.65rem;padding:8px;text-align:center;word-break:break-all">PIX: '+PIX_DIS+'</div>';}
+}
+
+function cpyPix(){navigator.clipboard.writeText(PIX_DIS).then(()=>toast('Chave PIX copiada! 📋')).catch(()=>toast('Chave: '+PIX_DIS));}
+function goCfm(){closeOv('pm');openOv('ppm');}
+
+function addCart(){
+  if(!curProd)return;
+  if(cart.find(i=>i.id===curProd.id)){toast('Produto já está no carrinho!','e');return;}
+  cart.push({id:curProd.id,name:curProd.name,price:curProd.price,t:curProd.t});
+  saveCart();toast('Adicionado ao carrinho! 🛒');closeOv('pm');
+}
+
+// CART
+function saveCart(){localStorage.setItem('bs_c',JSON.stringify(cart));updBadge();}
+function updBadge(){document.getElementById('cbadge').textContent=cart.length;}
+function typeIcon(t){return{va:'🎯',vp:'💎',ra:'🟥',rbx:'💰'}[t]||'🎮';}
+function renderCart(){
+  const b=document.getElementById('cbody');
+  if(!cart.length){b.innerHTML='<div style="text-align:center;padding:3rem;color:var(--muted)">🛒 Carrinho vazio</div>';document.getElementById('ctot').textContent='R$ 0,00';return;}
+  b.innerHTML=cart.map(i=>`<div class="ci"><div style="font-size:1.4rem">${typeIcon(i.t)}</div><div class="cii"><div class="cin">${i.name}</div><div class="cip">${fmtR(i.price)}</div></div><button class="cirm" onclick="rmCart('${i.id}')">🗑️</button></div>`).join('');
+  document.getElementById('ctot').textContent=fmtR(cart.reduce((s,i)=>s+i.price,0));
+}
+function rmCart(id){cart=cart.filter(i=>i.id!==id);saveCart();renderCart();}
+function cartCk(){if(!cart.length){toast('Carrinho vazio!','e');return;}closeOv('cm');openOv('ppm');}
+
+// ORDER SUBMIT
+function subOrder(e){
+  e.preventDefault();
+  const n=document.getElementById('oN').value.trim(),em=document.getElementById('oE').value.trim(),ph=document.getElementById('oP').value.trim();
+  if(!n){toast('Informe seu nome!','e');return;}
+  if(!em&&!ph){toast('Informe e-mail ou celular!','e');return;}
+  const prod=curProd?curProd.name:cart.map(i=>i.name).join(', ');
+  const val=curProd?curProd.price:cart.reduce((s,i)=>s+i.price,0);
+  const ord={id:Date.now(),date:new Date().toLocaleString('pt-BR'),name:n,contact:em||ph,product:prod,price:val,status:'Aguardando Entrega'};
+  orders.push(ord);localStorage.setItem('bs_o',JSON.stringify(orders));
+  if(!curProd){cart=[];saveCart();}
+  closeOv('ppm');toast('✅ Pedido registrado! Entraremos em contato em breve.');
+  document.getElementById('oN').value='';document.getElementById('oE').value='';document.getElementById('oP').value='';
+  curProd=null;
+}
+
+// LOGIN
+function doLgn(){
+  const e=document.getElementById('le').value,p=document.getElementById('lp').value;
+  if(!e||!p){toast('Preencha todos os campos!','e');return;}
+  const u=users.find(x=>x.email===e&&x.pass===p);
+  if(!u){toast('E-mail ou senha incorretos!','e');return;}
+  curUser=u;localStorage.setItem('bs_cu',JSON.stringify(u));updLoginUI();closeOv('lm');toast('Bem-vindo, '+u.name+'! 👋');
+}
+function doReg(){
+  const n=document.getElementById('rn').value,e=document.getElementById('re').value,p=document.getElementById('rp').value;
+  if(!n||!e||!p){toast('Preencha todos os campos!','e');return;}
+  if(users.find(x=>x.email===e)){toast('E-mail já cadastrado!','e');return;}
+  const u={name:n,email:e,pass:p};users.push(u);localStorage.setItem('bs_u',JSON.stringify(users));
+  curUser=u;localStorage.setItem('bs_cu',JSON.stringify(u));updLoginUI();closeOv('lm');toast('Conta criada! Bem-vindo, '+n+'! 🎉');
+}
+function logout(){curUser=null;localStorage.removeItem('bs_cu');updLoginUI();toast('Você saiu da conta.');}
+function updLoginUI(){const b=document.getElementById('lbtn');if(curUser){b.textContent='👤 '+curUser.name;b.onclick=logout;}else{b.textContent='👤 Entrar';b.onclick=()=>openOv('lm');}}
+function swTab(t){
+  if(t==='l'){document.getElementById('fl').style.display='block';document.getElementById('fr').style.display='none';document.getElementById('tl').classList.add('act');document.getElementById('tr').classList.remove('act');}
+  else{document.getElementById('fl').style.display='none';document.getElementById('fr').style.display='block';document.getElementById('tl').classList.remove('act');document.getElementById('tr').classList.add('act');}
+}
+
+// ADMIN
+function openAdm(){document.getElementById('admp').classList.add('open');document.getElementById('admC').style.display='none';document.getElementById('admL').style.display='block';document.getElementById('ap').value='';}
+function closeAdm(){document.getElementById('admp').classList.remove('open');}
+function chkAdm(){if(document.getElementById('ap').value===AP){document.getElementById('admL').style.display='none';document.getElementById('admC').style.display='block';loadAdm();}else toast('Senha incorreta!','e');}
+function loadAdm(){
+  const o=JSON.parse(localStorage.getItem('bs_o')||'[]');
+  const today=new Date().toLocaleDateString('pt-BR');
+  document.getElementById('sT').textContent=o.length;
+  document.getElementById('sR').textContent=fmtR(o.reduce((s,x)=>s+(x.price||0),0));
+  document.getElementById('sTd').textContent=o.filter(x=>x.date&&x.date.startsWith(today)).length;
+  const tbody=document.getElementById('otb');
+  if(!o.length){document.getElementById('noo').style.display='block';document.getElementById('ot').style.display='none';return;}
+  document.getElementById('noo').style.display='none';document.getElementById('ot').style.display='table';
+  tbody.innerHTML=[...o].reverse().map((x,i)=>`<tr><td>#${o.length-i}</td><td>${x.date}</td><td><strong>${x.name}</strong></td><td>${x.contact}</td><td>${x.product}</td><td style="color:var(--green);font-weight:700">${fmtR(x.price||0)}</td><td><span class="${x.status==='Entregue'?'sd':'sw'}">${x.status}</span></td><td><button class="delbtn" onclick="delOrder(${x.id})">Excluir</button></td></tr>`).join('');
+}
+function delOrder(id){
+  orders=orders.filter(x=>x.id!==id);localStorage.setItem('bs_o',JSON.stringify(orders));loadAdm();toast('Pedido removido.');
+}
+function exportOrders(){
+  const o=JSON.parse(localStorage.getItem('bs_o')||'[]');
+  if(!o.length){toast('Nenhum pedido para exportar.','e');return;}
+  const csv='#,Data,Nome,Contato,Produto,Valor,Status\n'+o.map((x,i)=>`${i+1},"${x.date}","${x.name}","${x.contact}","${x.product}","${fmtR(x.price)}","${x.status}"`).join('\n');
+  const a=document.createElement('a');a.href='data:text/csv;charset=utf-8,\uFEFF'+encodeURIComponent(csv);a.download='pedidos_boostshop.csv';a.click();
+}
+
+// OVERLAY
+function openOv(id){const o=document.getElementById(id);o.classList.add('open');if(id==='cm')renderCart();}
+function closeOv(id){document.getElementById(id).classList.remove('open');}
+document.querySelectorAll('.ov').forEach(o=>o.addEventListener('click',function(e){if(e.target===this)this.classList.remove('open');}));
+
+// TOAST
+let tt;
+function toast(msg,type){const t=document.getElementById('toast');t.textContent=msg;t.className='sh'+(type==='e'?' er':'');clearTimeout(tt);tt=setTimeout(()=>t.className='',3200);}
+
+// STARS CANVAS
+(function(){
+  const c=document.getElementById('bgc'),ctx=c.getContext('2d');
+  function resize(){c.width=innerWidth;c.height=innerHeight;}
+  resize();window.addEventListener('resize',resize);
+  const stars=Array.from({length:120},()=>({x:Math.random()*innerWidth,y:Math.random()*innerHeight,r:Math.random()*1.4+.3,phase:Math.random()*Math.PI*2,spd:Math.random()*.015+.005}));
+  function draw(){
+    ctx.clearRect(0,0,c.width,c.height);
+    stars.forEach(s=>{s.phase+=s.spd;ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fillStyle=`rgba(255,255,255,${.15+.55*Math.abs(Math.sin(s.phase))})`;ctx.fill();});
+    requestAnimationFrame(draw);
+  }draw();
+})();
+
+// INIT
+renderValCards();renderVP();renderRblx();renderRobux();updBadge();updLoginUI();
+</script>
+</body>
+</html>
